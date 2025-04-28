@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     // Display participant info for the selected activity
-    const activity = document.getElementById("activity").value;
+    const selectedActivity = document.getElementById("activity").value;
     const participantsDiv = document.getElementById("participants-info");
 
     try {
