@@ -45,6 +45,34 @@ document.addEventListener("DOMContentLoaded", () => {
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    // Display participant info for the selected activity
+    const selectedActivity = document.getElementById("activity").value;
+    const participantsDiv = document.getElementById("participants-info");
+
+    try {
+      const response = await fetch(`/activities/${encodeURIComponent(activity)}`);
+      const activityDetails = await response.json();
+
+      if (response.ok) {
+      const participants = activityDetails.participants;
+
+      participantsDiv.innerHTML = `
+        <h4>Participants for ${activity}:</h4>
+        <ul>
+        ${participants.map(participant => `<li>${participant}</li>`).join("")}
+        </ul>
+      `;
+      participantsDiv.classList.remove("hidden");
+      } else {
+      participantsDiv.innerHTML = "<p>Failed to load participants. Please try again later.</p>";
+      participantsDiv.classList.add("error");
+      }
+    } catch (error) {
+      participantsDiv.innerHTML = "<p>Failed to load participants. Please try again later.</p>";
+      participantsDiv.classList.add("error");
+      console.error("Error fetching participants:", error);
+    }
+
     const email = document.getElementById("email").value;
     const activity = document.getElementById("activity").value;
 
@@ -78,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
-    }
+    }   
   });
 
   // Initialize app
